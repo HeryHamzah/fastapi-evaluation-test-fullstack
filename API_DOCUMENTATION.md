@@ -1,6 +1,7 @@
-# 📱 Mobile App API Documentation
+# 📚 API Documentation
 
 ## 📋 Table of Contents
+
 - [Overview](#overview)
 - [Base URL](#base-url)
 - [Authentication](#authentication)
@@ -12,9 +13,10 @@
 
 ## 🎯 Overview
 
-Product Management API untuk integrasi mobile apps dengan JWT authentication.
+Product Management API untuk integrasi aplikasi web & mobile dengan JWT authentication.
 
 **Features:**
+
 - 🔐 JWT Authentication dengan role-based access
 - 👥 User Management (Admin only)
 - 📦 Product Management dengan filter & sort
@@ -22,6 +24,7 @@ Product Management API untuk integrasi mobile apps dengan JWT authentication.
 - 💰 Auto-calculate harga setelah diskon
 
 **Roles:**
+
 - **Admin**: Full access
 - **User**: Access products & upload
 
@@ -34,6 +37,7 @@ http://127.0.0.1:8000/api/v1
 ```
 
 **Default Admin:**
+
 ```
 Email: admin@example.com
 Password: admin123
@@ -44,10 +48,12 @@ Password: admin123
 ## 🔐 Authentication
 
 ### Flow
+
 1. Login dengan email & password → dapat `access_token`
 2. Include token di header semua request: `Authorization: Bearer <token>`
 
 ### Token Expiration
+
 - Access Token: 30 menit
 - Refresh Token: 7 hari
 
@@ -58,9 +64,11 @@ Password: admin123
 ## 1. Authentication
 
 ### POST /auth/login
+
 Login dan dapatkan access token.
 
 **Request:**
+
 ```json
 {
   "email": "admin@example.com",
@@ -69,6 +77,7 @@ Login dan dapatkan access token.
 ```
 
 **Response (200):**
+
 ```json
 {
   "access_token": "eyJhbGc...",
@@ -84,6 +93,7 @@ Login dan dapatkan access token.
 ```
 
 **cURL:**
+
 ```bash
 curl -X POST "http://127.0.0.1:8000/api/v1/auth/login" \
   -H "Content-Type: application/json" \
@@ -93,11 +103,13 @@ curl -X POST "http://127.0.0.1:8000/api/v1/auth/login" \
 ---
 
 ### POST /auth/logout
+
 Logout user (requires token).
 
 **Headers:** `Authorization: Bearer <token>`
 
 **Response (200):**
+
 ```json
 {
   "message": "Logout berhasil"
@@ -106,14 +118,40 @@ Logout user (requires token).
 
 ---
 
+### GET /auth/me
+
+Get current authenticated user.
+
+**Headers:** `Authorization: Bearer <token>`
+
+**Response (200):**
+
+```json
+{
+  "id": 1,
+  "nama": "Administrator",
+  "no_telepon": "0000000000",
+  "email": "admin@example.com",
+  "role": "admin",
+  "status_user": "aktif",
+  "photo_profile": null,
+  "created_at": "2024-01-01T10:00:00",
+  "updated_at": "2024-01-01T10:00:00"
+}
+```
+
+---
+
 ## 2. User Management (Admin Only)
 
 ### POST /users
+
 Create user baru.
 
 **Headers:** `Authorization: Bearer <admin_token>`
 
 **Request:**
+
 ```json
 {
   "nama": "John Doe",
@@ -127,6 +165,7 @@ Create user baru.
 ```
 
 **Fields:**
+
 - `nama` (required): Full name
 - `no_telepon` (required): Phone (10-20 chars)
 - `email` (required): Email (unique)
@@ -136,6 +175,7 @@ Create user baru.
 - `photo_profile` (optional): Photo URL
 
 **Response (201):**
+
 ```json
 {
   "id": 2,
@@ -153,11 +193,13 @@ Create user baru.
 ---
 
 ### GET /users
+
 Get all users dengan pagination.
 
 **Headers:** `Authorization: Bearer <admin_token>`
 
 **Query Params:**
+
 - `page` (default: 1): Page number
 - `limit` (default: 10, max: 100): Items per page
 - `status`: Filter (aktif/nonaktif)
@@ -166,11 +208,13 @@ Get all users dengan pagination.
 - `sort_order` (default: asc): asc/desc
 
 **Example:**
+
 ```
 GET /users?page=1&limit=10&status=aktif&search=john&sort_by=nama&sort_order=asc
 ```
 
 **Response (200):**
+
 ```json
 {
   "items": [
@@ -194,6 +238,7 @@ GET /users?page=1&limit=10&status=aktif&search=john&sort_by=nama&sort_order=asc
 ---
 
 ### GET /users/{user_id}
+
 Get user by ID.
 
 **Headers:** `Authorization: Bearer <admin_token>`
@@ -203,11 +248,13 @@ Get user by ID.
 ---
 
 ### PUT /users/{user_id}
+
 Update user (all fields optional).
 
 **Headers:** `Authorization: Bearer <admin_token>`
 
 **Request:**
+
 ```json
 {
   "nama": "John Updated",
@@ -220,11 +267,13 @@ Update user (all fields optional).
 ---
 
 ### DELETE /users/{user_id}
+
 Delete user.
 
 **Headers:** `Authorization: Bearer <admin_token>`
 
 **Response (200):**
+
 ```json
 {
   "message": "User berhasil dihapus"
@@ -236,11 +285,13 @@ Delete user.
 ## 3. Product Management
 
 ### POST /products
+
 Create produk baru.
 
 **Headers:** `Authorization: Bearer <token>`
 
 **Request:**
+
 ```json
 {
   "nama_produk": "Laptop ASUS ROG",
@@ -261,6 +312,7 @@ Create produk baru.
 ```
 
 **Fields:**
+
 - `nama_produk` (required): Product name
 - `kategori` (required): Category
 - `deskripsi` (optional): Description
@@ -274,6 +326,7 @@ Create produk baru.
 - `jumlah_terjual` (optional): Units sold (default: 0)
 
 **Response (201):**
+
 ```json
 {
   "id": 1,
@@ -296,6 +349,7 @@ Create produk baru.
 ```
 
 **Notes:**
+
 - `harga_setelah_diskon` auto-calculated: `harga_satuan * (1 - diskon/100)`
 - Status auto "menipis" if `stok <= threshold_stok`
 - Upload images first via `/upload/images` endpoint
@@ -303,11 +357,13 @@ Create produk baru.
 ---
 
 ### GET /products
+
 Get all products dengan pagination.
 
 **Headers:** `Authorization: Bearer <token>`
 
 **Query Params:**
+
 - `page` (default: 1): Page number
 - `limit` (default: 10, max: 100): Items per page
 - `kategori`: Filter by category
@@ -317,11 +373,13 @@ Get all products dengan pagination.
 - `sort_order` (default: asc): asc/desc
 
 **Example:**
+
 ```
 GET /products?page=1&limit=20&kategori=Electronics&status=aktif&search=laptop&sort_by=harga_satuan&sort_order=desc
 ```
 
 **Response (200):**
+
 ```json
 {
   "items": [
@@ -329,6 +387,7 @@ GET /products?page=1&limit=20&kategori=Electronics&status=aktif&search=laptop&so
       "id": 1,
       "nama_produk": "Laptop ASUS ROG",
       "kategori": "Electronics",
+      "deskripsi": "Gaming laptop with RTX 4060, 16GB RAM, 512GB SSD",
       "harga_satuan": 15000000.0,
       "stok": 10,
       "status_produk": "aktif",
@@ -349,6 +408,7 @@ GET /products?page=1&limit=20&kategori=Electronics&status=aktif&search=laptop&so
 ---
 
 ### GET /products/{product_id}
+
 Get product by ID.
 
 **Headers:** `Authorization: Bearer <token>`
@@ -358,11 +418,13 @@ Get product by ID.
 ---
 
 ### PUT /products/{product_id}
+
 Update product (all fields optional).
 
 **Headers:** `Authorization: Bearer <token>`
 
 **Request:**
+
 ```json
 {
   "nama_produk": "Laptop ASUS ROG Updated",
@@ -376,11 +438,13 @@ Update product (all fields optional).
 ---
 
 ### PATCH /products/{product_id}/status
+
 Update status only.
 
 **Headers:** `Authorization: Bearer <token>`
 
 **Request:**
+
 ```json
 {
   "status_produk": "nonaktif"
@@ -392,11 +456,13 @@ Update status only.
 ---
 
 ### PATCH /products/{product_id}/stock
+
 Update stock (add/subtract).
 
 **Headers:** `Authorization: Bearer <token>`
 
 **Request:**
+
 ```json
 {
   "adjustment": 5,
@@ -405,6 +471,7 @@ Update stock (add/subtract).
 ```
 
 **Operations:**
+
 - `add`: Tambah stock
 - `subtract`: Kurangi stock (validate cukup)
 
@@ -413,11 +480,13 @@ Update stock (add/subtract).
 ---
 
 ### DELETE /products/{product_id}
+
 Delete product.
 
 **Headers:** `Authorization: Bearer <token>`
 
 **Response (200):**
+
 ```json
 {
   "message": "Produk berhasil dihapus"
@@ -429,18 +498,22 @@ Delete product.
 ## 4. File Upload
 
 ### POST /upload/image
+
 Upload single image.
 
-**Headers:** 
+**Headers:**
+
 - `Authorization: Bearer <token>`
 - `Content-Type: multipart/form-data`
 
 **Form Data:**
+
 - `file`: Image file
 
 **Supported:** JPG, JPEG, PNG, GIF, WEBP, SVG (Max: 5MB)
 
 **Response (201):**
+
 ```json
 {
   "filename": "laptop.jpg",
@@ -450,6 +523,7 @@ Upload single image.
 ```
 
 **cURL:**
+
 ```bash
 curl -X POST "http://127.0.0.1:8000/api/v1/upload/image" \
   -H "Authorization: Bearer <token>" \
@@ -459,16 +533,20 @@ curl -X POST "http://127.0.0.1:8000/api/v1/upload/image" \
 ---
 
 ### POST /upload/images
+
 Upload multiple images (max 10).
 
-**Headers:** 
+**Headers:**
+
 - `Authorization: Bearer <token>`
 - `Content-Type: multipart/form-data`
 
 **Form Data:**
+
 - `files`: Multiple image files
 
 **Response (201):**
+
 ```json
 {
   "files": [
@@ -488,6 +566,7 @@ Upload multiple images (max 10).
 ```
 
 **cURL:**
+
 ```bash
 curl -X POST "http://127.0.0.1:8000/api/v1/upload/images" \
   -H "Authorization: Bearer <token>" \
@@ -500,21 +579,23 @@ curl -X POST "http://127.0.0.1:8000/api/v1/upload/images" \
 ## 📦 Data Models
 
 ### User
+
 ```typescript
 {
-  id: number
-  nama: string
-  no_telepon: string
-  email: string
-  role: "admin" | "user"
-  status_user: "aktif" | "nonaktif"
-  photo_profile: string | null
-  created_at: datetime
-  updated_at: datetime
+  id: number;
+  nama: string;
+  no_telepon: string;
+  email: string;
+  role: "admin" | "user";
+  status_user: "aktif" | "nonaktif";
+  photo_profile: string | null;
+  created_at: datetime;
+  updated_at: datetime;
 }
 ```
 
 ### Product
+
 ```typescript
 {
   id: number
@@ -541,6 +622,7 @@ curl -X POST "http://127.0.0.1:8000/api/v1/upload/images" \
 ## ❌ Error Handling
 
 ### Status Codes
+
 - `200` OK
 - `201` Created
 - `400` Bad Request
@@ -551,6 +633,7 @@ curl -X POST "http://127.0.0.1:8000/api/v1/upload/images" \
 - `500` Server Error
 
 ### Error Response
+
 ```json
 {
   "detail": "Error message"
@@ -558,6 +641,7 @@ curl -X POST "http://127.0.0.1:8000/api/v1/upload/images" \
 ```
 
 ### Validation Error
+
 ```json
 {
   "detail": [
@@ -575,12 +659,14 @@ curl -X POST "http://127.0.0.1:8000/api/v1/upload/images" \
 ## 💡 Best Practices
 
 ### 1. Upload Flow
+
 ```
 1. Upload image → GET url
 2. Use url in product/user creation
 ```
 
 ### 2. Authentication
+
 ```
 1. Login once → store access_token
 2. Include token in all requests
@@ -588,16 +674,18 @@ curl -X POST "http://127.0.0.1:8000/api/v1/upload/images" \
 ```
 
 ### 3. Pagination
+
 ```
 Start with limit=10, increase if needed
 Use search & filters to reduce data
 ```
 
 ### 4. Error Handling
+
 ```typescript
 try {
-  const response = await api.request()
-  return response.data
+  const response = await api.request();
+  return response.data;
 } catch (error) {
   if (error.status === 401) {
     // Re-authenticate
@@ -609,9 +697,10 @@ try {
 
 ---
 
-## 📱 Mobile Implementation Example
+## 💻 Client Implementation Examples
 
 ### Flutter/Dart
+
 ```dart
 class ApiService {
   final String baseUrl = 'http://127.0.0.1:8000/api/v1';
@@ -623,7 +712,7 @@ class ApiService {
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'email': email, 'password': password}),
     );
-    
+
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       accessToken = data['access_token'];
@@ -637,7 +726,7 @@ class ApiService {
       Uri.parse('$baseUrl/products?page=$page&limit=$limit'),
       headers: {'Authorization': 'Bearer $accessToken'},
     );
-    
+
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       return (data['items'] as List)
@@ -650,18 +739,19 @@ class ApiService {
 ```
 
 ### React Native/TypeScript
+
 ```typescript
 class ApiService {
-  private baseUrl = 'http://127.0.0.1:8000/api/v1';
+  private baseUrl = "http://127.0.0.1:8000/api/v1";
   private accessToken: string | null = null;
 
   async login(email: string, password: string) {
     const response = await fetch(`${this.baseUrl}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
-    
+
     const data = await response.json();
     this.accessToken = data.access_token;
     return data;
@@ -671,10 +761,10 @@ class ApiService {
     const response = await fetch(
       `${this.baseUrl}/products?page=${page}&limit=${limit}`,
       {
-        headers: { 'Authorization': `Bearer ${this.accessToken}` },
+        headers: { Authorization: `Bearer ${this.accessToken}` },
       }
     );
-    
+
     return await response.json();
   }
 }

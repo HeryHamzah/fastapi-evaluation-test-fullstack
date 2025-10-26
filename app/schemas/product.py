@@ -9,8 +9,10 @@ from app.models.product import ProductStatus
 
 class ProductBase(BaseModel):
     """Base product schema with common fields."""
-    nama_produk: str = Field(min_length=1, max_length=255, description="Product name")
-    kategori: str = Field(min_length=1, max_length=100, description="Product category")
+    nama_produk: str = Field(
+        min_length=1, max_length=255, description="Product name")
+    kategori: str = Field(min_length=1, max_length=100,
+                          description="Product category")
     deskripsi: Optional[str] = Field(None, description="Product description")
     harga_satuan: float = Field(gt=0, description="Unit price")
 
@@ -18,7 +20,7 @@ class ProductBase(BaseModel):
 class ProductCreate(ProductBase):
     """
     Schema for creating a new product.
-    
+
     Example:
         {
             "nama_produk": "Laptop ASUS ROG",
@@ -34,13 +36,19 @@ class ProductCreate(ProductBase):
         }
     """
     stok_awal: int = Field(ge=0, description="Initial stock quantity")
-    gambar: Optional[List[str]] = Field(default=[], description="List of image URLs")
-    status_produk: ProductStatus = Field(default=ProductStatus.AKTIF, description="Product status")
-    threshold_stok: Optional[int] = Field(None, ge=0, description="Minimum stock threshold")
-    diskon: Optional[float] = Field(0.0, ge=0, le=100, description="Discount percentage (0-100)")
-    rating: Optional[float] = Field(0.0, ge=0, le=5, description="Product rating (0-5)")
-    jumlah_terjual: Optional[int] = Field(0, ge=0, description="Number of units sold")
-    
+    gambar: Optional[List[str]] = Field(
+        default=[], description="List of image URLs")
+    status_produk: ProductStatus = Field(
+        default=ProductStatus.AKTIF, description="Product status")
+    threshold_stok: Optional[int] = Field(
+        None, ge=0, description="Minimum stock threshold")
+    diskon: Optional[float] = Field(
+        0.0, ge=0, le=100, description="Discount percentage (0-100)")
+    rating: Optional[float] = Field(
+        0.0, ge=0, le=5, description="Product rating (0-5)")
+    jumlah_terjual: Optional[int] = Field(
+        0, ge=0, description="Number of units sold")
+
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
@@ -62,7 +70,7 @@ class ProductCreate(ProductBase):
 class ProductUpdate(BaseModel):
     """
     Schema for full product update (all fields optional).
-    
+
     Example:
         {
             "nama_produk": "Updated Product Name",
@@ -82,7 +90,7 @@ class ProductUpdate(BaseModel):
     diskon: Optional[float] = Field(None, ge=0, le=100)
     rating: Optional[float] = Field(None, ge=0, le=5)
     jumlah_terjual: Optional[int] = Field(None, ge=0)
-    
+
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
@@ -97,14 +105,14 @@ class ProductUpdate(BaseModel):
 class ProductStatusUpdate(BaseModel):
     """
     Schema for updating only product status.
-    
+
     Example:
         {
             "status_produk": "nonaktif"
         }
     """
     status_produk: ProductStatus = Field(description="Product status")
-    
+
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
@@ -117,7 +125,7 @@ class ProductStatusUpdate(BaseModel):
 class ProductStockUpdate(BaseModel):
     """
     Schema for updating product stock.
-    
+
     Example:
         {
             "adjustment": -5,
@@ -126,14 +134,14 @@ class ProductStockUpdate(BaseModel):
     """
     adjustment: int = Field(description="Stock adjustment amount")
     operation: str = Field(description="Operation: 'add' or 'subtract'")
-    
+
     @field_validator('operation')
     @classmethod
     def validate_operation(cls, v: str) -> str:
         if v not in ['add', 'subtract']:
             raise ValueError("operation must be 'add' or 'subtract'")
         return v
-    
+
     model_config = ConfigDict(
         json_schema_extra={
             "example": {
@@ -147,7 +155,7 @@ class ProductStockUpdate(BaseModel):
 class ProductResponse(ProductBase):
     """
     Schema for product response.
-    
+
     Example:
         {
             "id": 1,
@@ -180,7 +188,7 @@ class ProductResponse(ProductBase):
     harga_setelah_diskon: float
     created_at: datetime
     updated_at: datetime
-    
+
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -191,6 +199,7 @@ class ProductListResponse(BaseModel):
     id: int
     nama_produk: str
     kategori: str
+    deskripsi: Optional[str] = None
     harga_satuan: float
     stok: int
     status_produk: ProductStatus
@@ -199,5 +208,5 @@ class ProductListResponse(BaseModel):
     jumlah_terjual: int
     harga_setelah_diskon: float
     gambar: List[str]
-    
+
     model_config = ConfigDict(from_attributes=True)

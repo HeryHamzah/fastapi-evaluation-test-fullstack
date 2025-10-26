@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database.session import get_db
 from app.schemas.auth import LoginRequest, LoginResponse, Token
 from app.schemas.common import MessageResponse
+from app.schemas.user import UserResponse
 from app.services.auth_service import AuthService
 from app.api.deps.auth import get_current_active_user
 from app.models.user import User
@@ -48,10 +49,10 @@ async def get_token(
         email=form_data.username,  # Swagger UI sends email as username
         password=form_data.password
     )
-    
+
     auth_service = AuthService(db)
     result = await auth_service.login(login_data)
-    
+
     # Return only token data (OAuth2 standard)
     return Token(
         access_token=result.access_token,
@@ -122,3 +123,24 @@ async def logout(
     auth_service = AuthService(db)
     result = await auth_service.logout(current_user.id)
     return MessageResponse(message=result["message"])
+
+
+@router.get(
+    "/me",
+    response_model=UserResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Get Current User",
+    description="""
+    Get information about the currently authenticated user.
+
+    **Headers:**
+    - `Authorization`: Bearer {access_token}
+    """
+)
+async def get_current_user(
+    current_user: User = Depends(get_current_active_user)
+):
+    """
+    Return currently authenticated user.
+    """
+    return UserResponse.model_validate(current_user)

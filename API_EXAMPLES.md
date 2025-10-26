@@ -28,6 +28,7 @@ curl -X POST "http://localhost:8000/api/v1/auth/login" \
 ```
 
 **Response:**
+
 ```json
 {
   "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
@@ -54,6 +55,7 @@ curl -X POST "http://localhost:8000/api/v1/auth/token" \
 ```
 
 **Response:**
+
 ```json
 {
   "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
@@ -66,6 +68,29 @@ curl -X POST "http://localhost:8000/api/v1/auth/token" \
 ```bash
 curl -X POST "http://localhost:8000/api/v1/auth/logout" \
   -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+### Get Current User
+
+```bash
+curl -X GET "http://localhost:8000/api/v1/auth/me" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+**Response:**
+
+```json
+{
+  "id": 1,
+  "nama": "Administrator",
+  "no_telepon": "0000000000",
+  "email": "admin@example.com",
+  "role": "admin",
+  "status_user": "aktif",
+  "photo_profile": null,
+  "created_at": "2024-01-01T10:00:00",
+  "updated_at": "2024-01-01T10:00:00"
+}
 ```
 
 ## 📤 File Upload
@@ -81,6 +106,7 @@ curl -X POST "http://localhost:8000/api/v1/upload/image" \
 ```
 
 **Response:**
+
 ```json
 {
   "filename": "profile.jpg",
@@ -102,6 +128,7 @@ curl -X POST "http://localhost:8000/api/v1/upload/images" \
 ```
 
 **Response:**
+
 ```json
 {
   "files": [
@@ -126,6 +153,7 @@ curl -X POST "http://localhost:8000/api/v1/upload/images" \
 ```
 
 **Workflow:**
+
 1. Upload image(s) dulu
 2. Dapatkan URL dari response
 3. Gunakan URL tersebut di field `photo_profile` (users) atau `gambar` (products)
@@ -168,6 +196,7 @@ curl -X GET "http://localhost:8000/api/v1/users?page=1&limit=10&status=aktif&sea
 ```
 
 **Response:**
+
 ```json
 {
   "items": [
@@ -241,6 +270,7 @@ curl -X POST "http://localhost:8000/api/v1/products" \
 ```
 
 **Response:**
+
 ```json
 {
   "id": 1,
@@ -290,6 +320,7 @@ curl -X GET "http://localhost:8000/api/v1/products?page=1&limit=10&kategori=Elec
 ```
 
 **Response:**
+
 ```json
 {
   "items": [
@@ -297,6 +328,7 @@ curl -X GET "http://localhost:8000/api/v1/products?page=1&limit=10&kategori=Elec
       "id": 1,
       "nama_produk": "Laptop ASUS ROG Strix",
       "kategori": "Electronics",
+      "deskripsi": "Gaming laptop with RTX 4060, 16GB RAM, 512GB SSD",
       "harga_satuan": 15000000.0,
       "stok": 10,
       "status_produk": "aktif",
@@ -446,21 +478,21 @@ print(response.json())
 ### Using fetch API
 
 ```javascript
-const BASE_URL = 'http://localhost:8000/api/v1';
+const BASE_URL = "http://localhost:8000/api/v1";
 
 // Login
 async function login() {
   const response = await fetch(`${BASE_URL}/auth/login`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      email: 'admin@example.com',
-      password: 'admin123',
+      email: "admin@example.com",
+      password: "admin123",
     }),
   });
-  
+
   const data = await response.json();
   return data.access_token;
 }
@@ -469,24 +501,24 @@ async function login() {
 async function getProducts(token) {
   const response = await fetch(`${BASE_URL}/products?page=1&limit=10`, {
     headers: {
-      'Authorization': `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   });
-  
+
   return await response.json();
 }
 
 // Create product
 async function createProduct(token, productData) {
   const response = await fetch(`${BASE_URL}/products`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(productData),
   });
-  
+
   return await response.json();
 }
 
@@ -554,6 +586,7 @@ echo "✨ Done!"
 ## 📊 Query Parameters Reference
 
 ### User List
+
 - `page`: Page number (default: 1)
 - `limit`: Items per page (default: 10, max: 100)
 - `status`: Filter by status (`aktif` or `nonaktif`)
@@ -562,6 +595,7 @@ echo "✨ Done!"
 - `sort_order`: Sort order (`asc` or `desc`)
 
 ### Product List
+
 - `page`: Page number (default: 1)
 - `limit`: Items per page (default: 10, max: 100)
 - `kategori`: Filter by category

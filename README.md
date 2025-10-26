@@ -5,18 +5,21 @@ Backend API lengkap untuk sistem manajemen produk menggunakan FastAPI dengan cle
 ## 🚀 Fitur Utama
 
 - **Authentication & Authorization**
+
   - JWT-based authentication
   - Role-based access control (Admin & User)
   - OAuth2PasswordBearer implementation
   - Secure password hashing dengan bcrypt
 
 - **User Management** (Admin Only)
+
   - CRUD operations lengkap
   - Pagination, search, filter, dan sorting
   - Status user (aktif/nonaktif)
   - Profile photo support
 
 - **Product Management**
+
   - CRUD operations dengan business logic
   - Status otomatis (aktif/nonaktif/menipis)
   - Perhitungan harga setelah diskon
@@ -25,6 +28,7 @@ Backend API lengkap untuk sistem manajemen produk menggunakan FastAPI dengan cle
   - Advanced filtering dan sorting
 
 - **File Upload**
+
   - Single & multiple image upload
   - Format support: JPG, PNG, GIF, WEBP, SVG
   - File size validation (max 5MB)
@@ -168,7 +172,8 @@ ADMIN_PASSWORD=admin123
 ADMIN_NAME=Administrator
 ```
 
-**⚠️ PENTING:** 
+**⚠️ PENTING:**
+
 - Ganti `SECRET_KEY` dengan key yang aman (gunakan: `openssl rand -hex 32`)
 - Ganti password database sesuai setup PostgreSQL Anda
 - Ganti default admin password untuk production
@@ -190,9 +195,11 @@ Server akan berjalan di: **http://localhost:8000**
 ## 📚 API Documentation
 
 ### Swagger UI (Interactive)
+
 Buka browser: **http://localhost:8000/docs**
 
 ### ReDoc (Alternative)
+
 Buka browser: **http://localhost:8000/redoc**
 
 ## 🔐 Authentication
@@ -212,6 +219,7 @@ Buka browser: **http://localhost:8000/redoc**
 **Endpoint:** `POST /api/v1/auth/login`
 
 **Request:**
+
 ```json
 {
   "email": "admin@example.com",
@@ -220,6 +228,7 @@ Buka browser: **http://localhost:8000/redoc**
 ```
 
 **Response:**
+
 ```json
 {
   "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
@@ -246,15 +255,19 @@ Authorization: Bearer <access_token>
 ## 🎯 API Endpoints
 
 ### Authentication
+
 - `POST /api/v1/auth/token` - Get OAuth2 token (for Swagger UI)
 - `POST /api/v1/auth/login` - Login user
+- `GET /api/v1/auth/me` - Get current authenticated user
 - `POST /api/v1/auth/logout` - Logout user
 
 ### File Upload
+
 - `POST /api/v1/upload/image` - Upload single image (for user photo)
 - `POST /api/v1/upload/images` - Upload multiple images (for product images)
 
 ### User Management (Admin Only)
+
 - `POST /api/v1/users` - Create user
 - `GET /api/v1/users` - List users (pagination, filter, search, sort)
 - `GET /api/v1/users/{id}` - Get user detail
@@ -262,6 +275,7 @@ Authorization: Bearer <access_token>
 - `DELETE /api/v1/users/{id}` - Delete user
 
 ### Product Management
+
 - `POST /api/v1/products` - Create product
 - `GET /api/v1/products` - List products (pagination, filter, search, sort)
 - `GET /api/v1/products/{id}` - Get product detail
@@ -343,6 +357,7 @@ curl -X PATCH "http://localhost:8000/api/v1/products/1/stock" \
 ### Price Calculation
 
 Harga setelah diskon dihitung otomatis:
+
 ```python
 harga_setelah_diskon = harga_satuan * (1 - diskon / 100)
 ```
@@ -380,6 +395,7 @@ curl -X GET "http://localhost:8000/api/v1/products" \
 ## 🗃️ Database Schema
 
 ### Users Table
+
 ```sql
 - id (integer, PK)
 - nama (string)
@@ -394,6 +410,7 @@ curl -X GET "http://localhost:8000/api/v1/products" \
 ```
 
 ### Products Table
+
 ```sql
 - id (integer, PK)
 - nama_produk (string)
@@ -439,6 +456,7 @@ gunicorn app.main:app \
 ### Docker (Optional)
 
 Create `Dockerfile`:
+
 ```dockerfile
 FROM python:3.11-slim
 
@@ -453,6 +471,7 @@ CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 ```
 
 Build and run:
+
 ```bash
 docker build -t product-api .
 docker run -p 8000:8000 --env-file .env product-api
@@ -461,21 +480,27 @@ docker run -p 8000:8000 --env-file .env product-api
 ## 🐛 Troubleshooting
 
 ### Database Connection Error
+
 ```
 SQLALCHEMY_DATABASE_URI tidak valid
 ```
+
 **Solusi:** Pastikan PostgreSQL berjalan dan DATABASE_URL di .env sudah benar
 
 ### Import Error
+
 ```
 ModuleNotFoundError: No module named 'app'
 ```
+
 **Solusi:** Jalankan dari root directory dan pastikan PYTHONPATH sudah benar
 
 ### JWT Token Error
+
 ```
 Could not validate credentials
 ```
+
 **Solusi:** Token expired atau invalid. Login ulang untuk mendapat token baru
 
 ## 📖 Additional Resources
@@ -499,6 +524,7 @@ Product Management API - FastAPI Backend
 ---
 
 **Default Admin Login:**
+
 - Email: `admin@example.com`
 - Password: `admin123`
 

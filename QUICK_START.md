@@ -43,12 +43,14 @@ cp .env.example .env
 ```
 
 Edit `.env` minimal:
+
 ```env
 DATABASE_URL=postgresql+asyncpg://postgres:password@localhost:5432/product_management
 SECRET_KEY=your-secret-key-here
 ```
 
 💡 **Generate SECRET_KEY:**
+
 ```bash
 openssl rand -hex 32
 ```
@@ -66,9 +68,11 @@ uvicorn app.main:app --reload
 ## 🎯 Test API
 
 ### 1. Open Swagger UI
+
 http://localhost:8000/docs
 
 ### 2. Login
+
 - Click **POST /api/v1/auth/login**
 - Try it out
 - Use credentials:
@@ -81,12 +85,15 @@ http://localhost:8000/docs
 - Copy the `access_token`
 
 ### 3. Authorize
+
 - Click **Authorize** button (🔒)
 - Enter: `Bearer <your_token>`
 - Click Authorize
 
 ### 4. Test Endpoints
+
 Try creating a product:
+
 ```json
 {
   "nama_produk": "Test Product",
@@ -100,12 +107,15 @@ Try creating a product:
 ## 📱 Quick API Reference
 
 ### Authentication
+
 ```bash
 POST /api/v1/auth/login
+GET  /api/v1/auth/me
 POST /api/v1/auth/logout
 ```
 
 ### Users (Admin Only)
+
 ```bash
 GET    /api/v1/users
 POST   /api/v1/users
@@ -115,6 +125,7 @@ DELETE /api/v1/users/{id}
 ```
 
 ### Products
+
 ```bash
 GET    /api/v1/products
 POST   /api/v1/products
@@ -141,23 +152,27 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 ## ⚠️ Troubleshooting
 
 ### Port already in use
+
 ```bash
 # Kill process on port 8000
 lsof -ti:8000 | xargs kill -9
 ```
 
 ### Database connection error
+
 - Check PostgreSQL is running: `pg_isready`
 - Verify DATABASE_URL in .env
 - Test connection: `psql -U postgres -d product_management`
 
 ### Module not found
+
 ```bash
 # Reinstall dependencies
 pip install -r requirements.txt
 ```
 
 ### Tables not created
+
 ```bash
 # Pastikan DATABASE_URL benar, lalu restart aplikasi
 # Tables akan dibuat otomatis saat startup
@@ -172,6 +187,7 @@ pip install -r requirements.txt
 ## 🆘 Need Help?
 
 Common issues:
+
 1. ✅ Virtual environment activated?
 2. ✅ PostgreSQL running?
 3. ✅ .env file exists with correct values?
