@@ -207,7 +207,8 @@ curl -X GET "http://localhost:8000/api/v1/users?page=1&limit=10&status=aktif&sea
       "no_telepon": "081234567890",
       "role": "user",
       "status_user": "aktif",
-      "photo_profile": "https://example.com/photo.jpg"
+      "photo_profile": "https://example.com/photo.jpg",
+      "created_at": "2024-01-01T10:00:00"
     }
   ],
   "total": 1,
@@ -601,8 +602,10 @@ echo "✨ Done!"
 - `kategori`: Filter by category
 - `status`: Filter by status (`aktif`, `nonaktif`, or `menipis`)
 - `search`: Search by product name
-- `sort_by`: Sort field (`nama_produk`, `harga_satuan`, `stok`, `kategori`)
-- `sort_order`: Sort order (`asc` or `desc`)
+- `sort_by`: Sort field (`updated_at`, `nama_produk`, `harga_satuan`, `stok`, `kategori`) — default: `updated_at`
+- `sort_order`: Sort order (`asc` or `desc`) — default: `desc`
+
+**Default behavior:** Tanpa parameter `sort_by/sort_order`, daftar produk diurutkan berdasarkan `updated_at desc` (terbaru dulu).
 
 ---
 

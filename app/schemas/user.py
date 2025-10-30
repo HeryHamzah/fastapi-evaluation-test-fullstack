@@ -115,5 +115,6 @@ class UserListResponse(BaseModel):
     role: UserRole
     status_user: UserStatus
     photo_profile: Optional[str] = None
-    
+    created_at: datetime
+
     model_config = ConfigDict(from_attributes=True)

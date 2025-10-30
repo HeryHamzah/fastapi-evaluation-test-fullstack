@@ -100,7 +100,7 @@ evaluation-test-api/
 
 ### 1. Prerequisites
 
-- Python 3.10 atau lebih tinggi
+- Python 3.10 atau lebih tinggi (disarankan 3.11 untuk kompatibilitas dependency)
 - PostgreSQL 13 atau lebih tinggi
 - pip atau poetry untuk package management
 

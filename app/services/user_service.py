@@ -6,7 +6,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.user import User, UserStatus, UserRole
 from app.repositories.user_repository import UserRepository
-from app.schemas.user import UserCreate, UserUpdate, UserResponse
+from app.schemas.user import UserCreate, UserUpdate, UserResponse, UserListResponse
 from app.core.security import get_password_hash
 import math
 
@@ -68,7 +68,7 @@ class UserService:
         search: Optional[str] = None,
         sort_by: str = "nama",
         sort_order: str = "asc"
-    ) -> Tuple[List[UserResponse], int, int]:
+    ) -> Tuple[List[UserListResponse], int, int]:
         """
         Get all users with pagination and filtering.
         
@@ -96,7 +96,7 @@ class UserService:
         
         total_pages = math.ceil(total / limit) if total > 0 else 0
         
-        return [UserResponse.model_validate(user) for user in users], total, total_pages
+        return [UserListResponse.model_validate(user) for user in users], total, total_pages
     
     async def get_user_by_id(self, user_id: int) -> UserResponse:
         """

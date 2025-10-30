@@ -88,8 +88,8 @@ class ProductService:
         kategori: Optional[str] = None,
         status_filter: Optional[str] = None,
         search: Optional[str] = None,
-        sort_by: str = "nama_produk",
-        sort_order: str = "asc"
+        sort_by: str = "updated_at",
+        sort_order: str = "desc"
     ) -> Tuple[List[ProductListResponse], int, int]:
         """
         Get all products with pagination and filtering.

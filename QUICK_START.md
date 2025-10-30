@@ -4,7 +4,7 @@ Panduan cepat untuk menjalankan Product Management API.
 
 ## 📋 Prerequisites
 
-- Python 3.10+
+- Python 3.10+ (disarankan 3.11 untuk kompatibilitas dependency)
 - PostgreSQL 13+
 - Git (optional)
 

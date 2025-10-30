@@ -56,8 +56,8 @@ class ProductRepository:
         kategori: Optional[str] = None,
         status_filter: Optional[str] = None,
         search: Optional[str] = None,
-        sort_by: str = "nama_produk",
-        sort_order: str = "asc"
+        sort_by: str = "updated_at",
+        sort_order: str = "desc"
     ) -> Tuple[List[Product], int]:
         """
         Get all products with filtering, searching, sorting and pagination.
@@ -105,8 +105,8 @@ class ProductRepository:
             query = query.where(search_filter)
             count_query = count_query.where(search_filter)
         
-        # Apply sorting
-        sort_column = getattr(Product, sort_by, Product.nama_produk)
+        # Apply sorting (default to updated_at if invalid field)
+        sort_column = getattr(Product, sort_by, Product.updated_at)
         if sort_order.lower() == "desc":
             query = query.order_by(sort_column.desc())
         else:

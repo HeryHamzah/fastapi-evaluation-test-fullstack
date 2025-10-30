@@ -68,8 +68,8 @@ async def create_product(
     - `kategori`: Filter by category
     - `status`: Filter by status (aktif/nonaktif/menipis)
     - `search`: Search by product name
-    - `sort_by`: Sort field (nama_produk, harga_satuan, stok, kategori)
-    - `sort_order`: Sort order (asc/desc, default: asc)
+    - `sort_by`: Sort field (updated_at, nama_produk, harga_satuan, stok, kategori)
+    - `sort_order`: Sort order (asc/desc, default: desc)
     
     **Response:**
     - Paginated list with calculated fields (harga_setelah_diskon, etc.)
@@ -81,8 +81,8 @@ async def get_products(
     kategori: Optional[str] = Query(None, description="Filter by category"),
     status: Optional[str] = Query(None, description="Filter by status (aktif/nonaktif/menipis)"),
     search: Optional[str] = Query(None, description="Search by product name"),
-    sort_by: str = Query("nama_produk", description="Sort by field"),
-    sort_order: str = Query("asc", description="Sort order (asc/desc)"),
+    sort_by: str = Query("updated_at", description="Sort by field"),
+    sort_order: str = Query("desc", description="Sort order (asc/desc)"),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_active_user)
 ):

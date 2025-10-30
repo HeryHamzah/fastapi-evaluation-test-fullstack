@@ -225,7 +225,8 @@ GET /users?page=1&limit=10&status=aktif&search=john&sort_by=nama&sort_order=asc
       "no_telepon": "0000000000",
       "role": "admin",
       "status_user": "aktif",
-      "photo_profile": null
+      "photo_profile": null,
+      "created_at": "2024-01-01T10:00:00"
     }
   ],
   "total": 1,
@@ -369,14 +370,16 @@ Get all products dengan pagination.
 - `kategori`: Filter by category
 - `status`: Filter (aktif/nonaktif/menipis)
 - `search`: Search by product name
-- `sort_by` (default: nama_produk): nama_produk/harga_satuan/stok/kategori
-- `sort_order` (default: asc): asc/desc
+- `sort_by` (default: updated_at): updated_at/nama_produk/harga_satuan/stok/kategori
+- `sort_order` (default: desc): asc/desc
 
 **Example:**
 
 ```
 GET /products?page=1&limit=20&kategori=Electronics&status=aktif&search=laptop&sort_by=harga_satuan&sort_order=desc
 ```
+
+**Default:** Tanpa `sort_by/sort_order`, daftar produk diurutkan berdasarkan `updated_at desc` (terbaru dulu).
 
 **Response (200):**
 
